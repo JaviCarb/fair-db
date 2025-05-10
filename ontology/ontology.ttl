@@ -1,0 +1,240 @@
+@prefix : <http://example.org/fair#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ===============================
+#  GENERAL CONCEPTS
+# ===============================
+
+:Marketplace rdf:type owl:Class ;
+             rdfs:label "Marketplace" ;
+             rdfs:comment "A general marketplace where transactions occur. It can be a product or service marketplace." .
+
+:ProductMarketplace rdf:type owl:Class ;
+                    rdfs:subClassOf :Marketplace ;
+                    rdfs:label "Product Marketplace" ;
+                    rdfs:comment "A marketplace where products are sold (e.g., Stalls)." .
+
+:ServiceMarketplace rdf:type owl:Class ;
+                    rdfs:subClassOf :Marketplace ;
+                    rdfs:label "Service Marketplace" ;
+                    rdfs:comment "A marketplace where services are provided (e.g., Attractions)." .
+
+# ===============================
+#  PRIMARY ENTITIES
+# ===============================
+
+:Vendor rdf:type owl:Class ;
+        rdfs:label "Vendor" ;
+        rdfs:comment "A person working at a marketplace (either a stall or an attraction, but not both)." .
+
+:Stall rdf:type owl:Class ;
+       rdfs:subClassOf :ProductMarketplace ;
+       rdfs:label "Stall" ;
+       rdfs:comment "A product marketplace that sells merchandise and food." .
+
+:Attraction rdf:type owl:Class ;
+            rdfs:subClassOf :ServiceMarketplace ;
+            rdfs:label "Attraction" ;
+            rdfs:comment "A service marketplace providing entertainment." .
+
+:KidsAttraction rdf:type owl:Class ;
+                rdfs:subClassOf :Attraction ;
+                owl:disjointWith :AllAgesAttraction ;
+                rdfs:label "Kids Attraction" ;
+                rdfs:comment "An attraction with a height restriction." .
+
+:AllAgesAttraction rdf:type owl:Class ;
+                   rdfs:subClassOf :Attraction ;
+                   rdfs:label "All-Ages Attraction" ;
+                   rdfs:comment "An attraction suitable for all ages with varying intensity levels." .
+
+:Supplier rdf:type owl:Class ;
+          rdfs:label "Supplier" ;
+          rdfs:comment "An entity that provides products to be sold at a stall." .
+
+:Order rdf:type owl:Class ;
+       rdfs:label "Order" ;
+       rdfs:comment "An order of products placed with a supplier." .
+
+:Product rdf:type owl:Class ;
+         rdfs:label "Product" ;
+         rdfs:comment "An item available for sale at a stall." .
+
+:Merchandising rdf:type owl:Class ;
+               rdfs:subClassOf :Product ;
+               owl:disjointWith :Food ;
+               rdfs:label "Merchandising" ;
+               rdfs:comment "Merchandise products such as branded souvenirs." .
+
+:Food rdf:type owl:Class ;
+      rdfs:subClassOf :Product ;
+      rdfs:label "Food" ;
+      rdfs:comment "Food items sold at a stall." .
+
+:OrderItem rdf:type owl:Class ;
+           rdfs:label "Order Item" ;
+           rdfs:comment "A specific item within an order, capturing product, quantity and price." .
+
+# ===============================
+#  DATA PROPERTIES
+# ===============================
+
+:vendorID rdf:type owl:DatatypeProperty ;
+          rdfs:label "Vendor ID" ;
+          rdfs:domain :Vendor ;
+          rdfs:range xsd:integer .
+
+:idDocument rdf:type owl:DatatypeProperty ;
+            rdfs:label "ID Document" ;
+            rdfs:domain :Vendor ;
+            rdfs:range xsd:string .
+
+:vendorName rdf:type owl:DatatypeProperty ;
+            rdfs:label "Vendor Name" ;
+            rdfs:domain :Vendor ;
+            rdfs:range xsd:string .
+
+:vendorAge rdf:type owl:DatatypeProperty ;
+           rdfs:label "Vendor Age" ;
+           rdfs:domain :Vendor ;
+           rdfs:range xsd:integer .
+
+:phoneNumber rdf:type owl:DatatypeProperty ;
+             rdfs:label "Phone Number" ;
+             rdfs:domain :Vendor ;
+             rdfs:range xsd:string ;
+             rdfs:comment "Phone number must be valid for communication." .
+
+:stallName rdf:type owl:DatatypeProperty ;
+           rdfs:label "Stall Name" ;
+           rdfs:domain :Stall ;
+           rdfs:range xsd:string .
+
+:supplierName rdf:type owl:DatatypeProperty ;
+              rdfs:label "Supplier Name" ;
+              rdfs:domain :Supplier ;
+              rdfs:range xsd:string .
+
+:supplierAddress rdf:type owl:DatatypeProperty ;
+                 rdfs:label "Supplier Address" ;
+                 rdfs:domain :Supplier ;
+                 rdfs:range xsd:string .
+
+:orderDate rdf:type owl:DatatypeProperty ;
+           rdfs:label "Order Date" ;
+           rdfs:domain :Order ;
+           rdfs:range xsd:date ;
+           rdfs:comment "Orders must have a valid date within a reasonable range." .
+
+:productName rdf:type owl:DatatypeProperty ;
+             rdfs:label "Product Name" ;
+             rdfs:domain :Product ;
+             rdfs:range xsd:string .
+
+:stock rdf:type owl:DatatypeProperty ;
+       rdfs:label "Stock" ;
+       rdfs:domain :Product ;
+       rdfs:range xsd:nonNegativeInteger ;
+       rdfs:comment "Stock levels cannot be negative." .
+
+:maxHeight rdf:type owl:DatatypeProperty ;
+           rdfs:label "Maximum Height" ;
+           rdfs:domain :KidsAttraction ;
+           rdfs:range xsd:integer .
+
+:intensity rdf:type owl:DatatypeProperty ;
+           rdfs:label "Intensity" ;
+           rdfs:domain :AllAgesAttraction ;
+           rdfs:range xsd:string .
+
+:brand rdf:type owl:DatatypeProperty ;
+       rdfs:label "Brand" ;
+       rdfs:domain :Merchandising ;
+       rdfs:range xsd:string .
+
+:expirationDate rdf:type owl:DatatypeProperty ;
+               rdfs:label "Expiration Date" ;
+               rdfs:domain :Food ;
+               rdfs:range xsd:date .
+
+# ==== PRICE MODEL ====
+
+:hasPrice rdf:type owl:DatatypeProperty ;
+          rdfs:domain owl:Thing ;
+          rdfs:range xsd:decimal ;
+          rdfs:label "Has Price" ;
+          rdfs:comment "Generic price property applying to multiple contexts." .
+
+:price rdf:type owl:DatatypeProperty ;
+       rdfs:subPropertyOf :hasPrice ;
+       rdfs:domain [ rdf:type owl:Class ;
+                     owl:unionOf ( :Product :Attraction ) ] ;
+       rdfs:range xsd:decimal ;
+       rdfs:label "Price" ;
+       rdfs:comment "Base or standard price for a product or attraction." .
+
+:orderedUnitPrice rdf:type owl:DatatypeProperty ;
+                  rdfs:subPropertyOf :hasPrice ;
+                  rdfs:domain :OrderItem ;
+                  rdfs:range xsd:decimal ;
+                  rdfs:label "Ordered Unit Price" ;
+                  rdfs:comment "Price at which the product was ordered (may differ from standard)." .
+
+:orderedAmount rdf:type owl:DatatypeProperty ;
+               rdfs:domain :OrderItem ;
+               rdfs:range xsd:positiveInteger ;
+               rdfs:label "Ordered Amount" .
+
+# ===============================
+#  OBJECT PROPERTIES
+# ===============================
+
+:worksAt rdf:type owl:ObjectProperty ;
+         rdfs:label "Works At" ;
+         rdfs:domain :Vendor ;
+         rdfs:range :ServiceMarketplace ;
+         owl:propertyDisjointWith :attendsAt ;
+         rdfs:comment "A vendor works at an attraction and cannot work at a stall simultaneously." .
+
+:attendsAt rdf:type owl:ObjectProperty ;
+           rdfs:label "Attends At" ;
+           rdfs:domain :Vendor ;
+           rdfs:range :ProductMarketplace ;
+           rdfs:comment "A vendor attends a stall and cannot work at an attraction simultaneously." .
+
+:sells rdf:type owl:ObjectProperty ;
+       rdfs:label "Sells" ;
+       rdfs:domain :Stall ;
+       rdfs:range :Product .
+
+:provides rdf:type owl:ObjectProperty ;
+          rdfs:label "Provides" ;
+          rdfs:domain :Supplier ;
+          rdfs:range :Product .
+
+:manages rdf:type owl:ObjectProperty ;
+         rdfs:label "Manages" ;
+         rdfs:domain :Supplier ;
+         rdfs:range :Order .
+
+# ==== ORDER ITEM STRUCTURE ====
+
+:hasOrderItem rdf:type owl:ObjectProperty ;
+              rdfs:domain :Order ;
+              rdfs:range :OrderItem ;
+              owl:inverseOf :belongsToOrder ;
+              rdfs:label "Has Order Item" .
+
+:belongsToOrder rdf:type owl:ObjectProperty ;
+                rdfs:domain :OrderItem ;
+                rdfs:range :Order ;
+                rdfs:label "Belongs To Order" .
+
+:orderedProduct rdf:type owl:ObjectProperty ;
+                rdfs:domain :OrderItem ;
+                rdfs:range :Product ;
+                rdfs:label "Ordered Product" .
+

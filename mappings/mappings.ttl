@@ -1,0 +1,219 @@
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <http://example.org/fair#> .
+
+<#SupplierTriplesMap>
+  rr:logicalTable [ rr:tableName "SUPPLIER" ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/supplier/{ID}" ;
+    rr:class :Supplier
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :supplierName ;
+    rr:objectMap [ rr:column "NAME" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :supplierAddress ;
+    rr:objectMap [ rr:column "ADDRESS" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :provides ;
+    rr:objectMap [
+      rr:parentTriplesMap <#ProductTriplesMap> ;
+      rr:joinCondition [
+        rr:child "ID" ;
+        rr:parent "SUPPLIER_ID"
+      ]
+    ]
+  ].
+
+<#StallTriplesMap>
+  rr:logicalTable [ rr:tableName "STALL" ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/stall/{ID}" ;
+    rr:class :Stall
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :stallName ;
+    rr:objectMap [ rr:column "NAME" ]
+  ].
+
+<#FairVendorTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT ID, NAME, ID_DOCUMENT, AGE, PHONE_NUMBER,
+             REPLACE(STALL_ID, '.0', '') AS STALL_ID,
+             REPLACE(ATTRACTION_ID, '.0', '') AS ATTRACTION_ID
+      FROM FAIR_VENDOR
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/vendor/{ID}" ;
+    rr:class :Vendor
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :vendorName ;
+    rr:objectMap [ rr:column "NAME" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :idDocument ;
+    rr:objectMap [ rr:column "ID_DOCUMENT" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :vendorAge ;
+    rr:objectMap [ rr:column "AGE" ; rr:datatype xsd:integer ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :phoneNumber ;
+    rr:objectMap [ rr:column "PHONE_NUMBER" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :attendsAt ;
+    rr:objectMap [ rr:template "http://example.org/fair/stall/{STALL_ID}" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :worksAt ;
+    rr:objectMap [ rr:template "http://example.org/fair/attraction/{ATTRACTION_ID}" ]
+  ].
+
+<#AttractionTriplesMap>
+  rr:logicalTable [ rr:tableName "ATTRACTION" ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/attraction/{ID}" ;
+    rr:class :Attraction
+  ];
+  rr:predicateObjectMap [
+    rr:predicate rdfs:label ;
+    rr:objectMap [ rr:column "NAME" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :price ;
+    rr:objectMap [ rr:column "PRICE" ; rr:datatype xsd:decimal ]
+  ].
+
+<#KidsAttractionTriplesMap>
+  rr:logicalTable [ rr:tableName "KIDS_ATTRACTION" ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/attraction/{ID}" ;
+    rr:class :KidsAttraction
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :maxHeight ;
+    rr:objectMap [ rr:column "MAX_HEIGHT" ; rr:datatype xsd:integer ]
+  ].
+
+<#AllAgesAttractionTriplesMap>
+  rr:logicalTable [ rr:tableName "ALL_AGES_ATTRACTION" ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/attraction/{ID}" ;
+    rr:class :AllAgesAttraction
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :intensity ;
+    rr:objectMap [ rr:column "INTENSITY" ]
+  ].
+
+<#ProductTriplesMap>
+  rr:logicalTable [ rr:tableName "PRODUCT" ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/product/{ID}" ;
+    rr:class :Product
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :productName ;
+    rr:objectMap [ rr:column "NAME" ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :price ;
+    rr:objectMap [ rr:column "PRICE" ; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :stock ;
+    rr:objectMap [ rr:column "STOCK" ; rr:datatype xsd:nonNegativeInteger ]
+  ].
+
+<#MerchandisingTriplesMap>
+  rr:logicalTable [ rr:tableName "MERCHANDISING" ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/product/{ID}" ;
+    rr:class :Merchandising
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :brand ;
+    rr:objectMap [ rr:column "BRAND" ]
+  ].
+
+<#FoodTriplesMap>
+  rr:logicalTable [ rr:tableName "FOOD" ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/product/{ID}" ;
+    rr:class :Food
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :expirationDate ;
+    rr:objectMap [ rr:column "EXPIRATION_DATE" ; rr:datatype xsd:date ]
+  ].
+
+<#StallProductTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT REPLACE(STALL_ID, '.0', '') AS STALL_ID, PRODUCT_ID
+      FROM STALL_PRODUCT
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/stall/{STALL_ID}"
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :sells ;
+    rr:objectMap [
+      rr:parentTriplesMap <#ProductTriplesMap> ;
+      rr:joinCondition [ rr:child "PRODUCT_ID" ; rr:parent "ID" ]
+    ]
+  ].
+
+<#OrderTriplesMap>
+  rr:logicalTable [ rr:tableName "ORDER_TABLE" ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/order/{ID}" ;
+    rr:class :Order
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :orderDate ;
+    rr:objectMap [ rr:column "DATE" ; rr:datatype xsd:date ]
+  ].
+
+<#OrderProductTriplesMap>
+  rr:logicalTable [
+    rr:sqlQuery """
+      SELECT ORDER_ID, REPLACE(PRODUCT_ID, '.0', '') AS PRODUCT_ID, AMOUNT, UNIT_PRICE
+      FROM ORDER_PRODUCT
+    """
+  ];
+  rr:subjectMap [
+    rr:template "http://example.org/fair/orderItem/{ORDER_ID}_{PRODUCT_ID}" ;
+    rr:class :OrderItem
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :orderedAmount ;
+    rr:objectMap [ rr:column "AMOUNT" ; rr:datatype xsd:positiveInteger ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :orderedUnitPrice ;
+    rr:objectMap [ rr:column "UNIT_PRICE" ; rr:datatype xsd:decimal ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :belongsToOrder ;
+    rr:objectMap [
+      rr:parentTriplesMap <#OrderTriplesMap> ;
+      rr:joinCondition [ rr:child "ORDER_ID" ; rr:parent "ID" ]
+    ]
+  ];
+  rr:predicateObjectMap [
+    rr:predicate :orderedProduct ;
+    rr:objectMap [
+      rr:parentTriplesMap <#ProductTriplesMap> ;
+      rr:joinCondition [ rr:child "PRODUCT_ID" ; rr:parent "ID" ]
+    ]
+  ].
