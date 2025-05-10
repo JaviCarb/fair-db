@@ -1,0 +1,135 @@
+<http://example.org/fair/attraction/2>
+        a       <http://example.org/fair#Attraction> , <http://example.org/fair#AllAgesAttraction> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "Noria Gigante de Sevilla" ;
+        <http://example.org/fair#intensity>
+                "Baja" ;
+        <http://example.org/fair#price>
+                5.0 .
+
+<http://example.org/fair/orderItem/2_2>
+        a       <http://example.org/fair#OrderItem> ;
+        <http://example.org/fair#belongsToOrder>
+                <http://example.org/fair/order/2> ;
+        <http://example.org/fair#orderedAmount>
+                "1"^^<http://www.w3.org/2001/XMLSchema#positiveInteger> ;
+        <http://example.org/fair#orderedProduct>
+                <http://example.org/fair/product/2> ;
+        <http://example.org/fair#orderedUnitPrice>
+                5.0 .
+
+<http://example.org/fair/orderItem/1_1>
+        a       <http://example.org/fair#OrderItem> ;
+        <http://example.org/fair#belongsToOrder>
+                <http://example.org/fair/order/1> ;
+        <http://example.org/fair#orderedAmount>
+                "3"^^<http://www.w3.org/2001/XMLSchema#positiveInteger> ;
+        <http://example.org/fair#orderedProduct>
+                <http://example.org/fair/product/1> ;
+        <http://example.org/fair#orderedUnitPrice>
+                2.5 .
+
+<http://example.org/fair/product/1>
+        a       <http://example.org/fair#Product> , <http://example.org/fair#Merchandising> ;
+        <http://example.org/fair#brand>
+                "Marca A" ;
+        <http://example.org/fair#price>
+                2.5 ;
+        <http://example.org/fair#productName>
+                "Churros con Chocolate" ;
+        <http://example.org/fair#stock>
+                "500"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+
+<http://example.org/fair/vendor/3>
+        a       <http://example.org/fair#Vendor> ;
+        <http://example.org/fair#idDocument>
+                "34567890C" ;
+        <http://example.org/fair#phoneNumber>
+                "620456789" ;
+        <http://example.org/fair#vendorAge>
+                50 ;
+        <http://example.org/fair#vendorName>
+                "José Martínez" ;
+        <http://example.org/fair#worksAt>
+                <http://example.org/fair/attraction/2> .
+
+<http://example.org/fair/supplier/2>
+        a       <http://example.org/fair#Supplier> ;
+        <http://example.org/fair#provides>
+                <http://example.org/fair/product/2> ;
+        <http://example.org/fair#supplierAddress>
+                "Avenida de Andalucía, 23, Sevilla" ;
+        <http://example.org/fair#supplierName>
+                "Suministros Fiesta" .
+
+<http://example.org/fair/vendor/1>
+        a       <http://example.org/fair#Vendor> ;
+        <http://example.org/fair#attendsAt>
+                <http://example.org/fair/stall/1> ;
+        <http://example.org/fair#idDocument>
+                "12345678A" ;
+        <http://example.org/fair#phoneNumber>
+                "600123456" ;
+        <http://example.org/fair#vendorAge>
+                45 ;
+        <http://example.org/fair#vendorName>
+                "Antonio Fernández" .
+
+<http://example.org/fair/order/1>
+        a       <http://example.org/fair#Order> ;
+        <http://example.org/fair#orderDate>
+                "2024-03-01"^^<http://www.w3.org/2001/XMLSchema#date> .
+
+<http://example.org/fair/stall/1>
+        a       <http://example.org/fair#Stall> ;
+        <http://example.org/fair#sells>
+                <http://example.org/fair/product/2> , <http://example.org/fair/product/1> ;
+        <http://example.org/fair#stallName>
+                "Churrería San Ginés" .
+
+<http://example.org/fair/product/2>
+        a       <http://example.org/fair#Product> , <http://example.org/fair#Food> ;
+        <http://example.org/fair#expirationDate>
+                "2024-06-01"^^<http://www.w3.org/2001/XMLSchema#date> ;
+        <http://example.org/fair#price>
+                5.0 ;
+        <http://example.org/fair#productName>
+                "Peluches de Feria" ;
+        <http://example.org/fair#stock>
+                "300"^^<http://www.w3.org/2001/XMLSchema#nonNegativeInteger> .
+
+<http://example.org/fair/attraction/1>
+        a       <http://example.org/fair#Attraction> , <http://example.org/fair#KidsAttraction> ;
+        <http://www.w3.org/2000/01/rdf-schema#label>
+                "Montaña Rusa Torbellino" ;
+        <http://example.org/fair#maxHeight>
+                120 ;
+        <http://example.org/fair#price>
+                4.5 .
+
+<http://example.org/fair/vendor/2>
+        a       <http://example.org/fair#Vendor> ;
+        <http://example.org/fair#idDocument>
+                "23456789B" ;
+        <http://example.org/fair#phoneNumber>
+                "610987654" ;
+        <http://example.org/fair#vendorAge>
+                38 ;
+        <http://example.org/fair#vendorName>
+                "María López" ;
+        <http://example.org/fair#worksAt>
+                <http://example.org/fair/attraction/1> .
+
+<http://example.org/fair/supplier/1>
+        a       <http://example.org/fair#Supplier> ;
+        <http://example.org/fair#provides>
+                <http://example.org/fair/product/1> ;
+        <http://example.org/fair#supplierAddress>
+                "Calle Mayor, 45, Madrid" ;
+        <http://example.org/fair#supplierName>
+                "Distribuciones La Feria" .
+
+<http://example.org/fair/order/2>
+        a       <http://example.org/fair#Order> ;
+        <http://example.org/fair#orderDate>
+                "2024-03-02"^^<http://www.w3.org/2001/XMLSchema#date> .
