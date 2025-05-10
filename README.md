@@ -69,5 +69,6 @@ This project uses Apache Jena Fuseki, licensed under the Apache License 2.0. See
 
 This project is part of the course Knowledge Representation and Reasoning (INFO9014) imparted at the University of Liège.
 
-Álvaro Adrada Martínez-Flórez
+**Authors**:  
+Álvaro Adrada Martínez-Flórez  
 Javier Carballal Morgade
