@@ -64,30 +64,7 @@ WHERE {
 }
 
 
-# Query 5: Average price by product category
-# Description: Compares average prices between Food and Merchandising products
-
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX fair: <http://example.org/fair#>
-
-SELECT ?category (AVG(?price) AS ?averagePrice)
-WHERE {
-  ?product rdf:type ?type ;
-           fair:price ?price .
-
-  VALUES ?categoryType {
-    fair:Food
-    fair:Merchandising
-  }
-
-  FILTER(?type = ?categoryType)
-
-  BIND(STRAFTER(STR(?categoryType), "fair#") AS ?category)
-}
-GROUP BY ?category
-
-
-# Query 6: Vendors working in expensive attractions
+# Query 5: Vendors working in expensive attractions
 # Description: Gets vendors working at attractions costing more than 4 euros
 
 PREFIX fair: <http://example.org/fair#>
@@ -105,7 +82,7 @@ WHERE {
 ORDER BY DESC(?price)
 
 
-# Query 7: Number of vendors by type of attraction
+# Query 6: Number of vendors by type of attraction
 # Description: Groups and counts vendors working at Kids or All-Ages attractions
 
 PREFIX fair: <http://example.org/fair#>
