@@ -1,0 +1,120 @@
+# Query 1: Vendors without a phone number (negation as failure)
+# Description: Returns all vendors who do not have a phone number
+
+PREFIX fair: <http://example.org/fair#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?vendor ?name
+WHERE {
+  ?vendor rdf:type fair:Vendor .
+  OPTIONAL { ?vendor fair:vendorName ?name } .
+  FILTER NOT EXISTS { ?vendor fair:phoneNumber ?phone }
+}
+
+
+# Query 2: Total number of products sold per stall (aggregation)
+# Description: Counts how many products are sold at each stall
+
+PREFIX fair: <http://example.org/fair#>
+
+SELECT ?stall (COUNT(?product) AS ?productCount)
+WHERE {
+  ?stall a fair:Stall ;
+         fair:sells ?product .
+}
+GROUP BY ?stall
+ORDER BY DESC(?productCount)
+
+
+# Query 3: Average age of vendors by type (stall or attraction)
+# Description: Uses a subquery and conditional logic to separate vendors
+
+PREFIX fair: <http://example.org/fair#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?type (AVG(?age) AS ?averageAge)
+WHERE {
+  {
+    SELECT ?vendor ?age
+           (IF(BOUND(?stall), "Stall", "Attraction") AS ?type)
+    WHERE {
+      ?vendor rdf:type fair:Vendor ;
+              fair:vendorAge ?age .
+      OPTIONAL { ?vendor fair:attendsAt ?stall }
+      OPTIONAL { ?vendor fair:worksAt ?attraction }
+    }
+  }
+}
+GROUP BY ?type
+
+
+# Query 4: Vendors linked to products through stalls (paths)
+# Description: Finds vendors and the names of products sold at their stalls
+
+PREFIX fair: <http://example.org/fair#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT DISTINCT ?vendor ?vendorName ?product
+WHERE {
+  ?vendor rdf:type fair:Vendor ;
+          fair:attendsAt ?stall ;
+          fair:vendorName ?vendorName .
+
+  ?stall fair:sells/fair:productName ?product .
+}
+
+
+# Query 5: Average price by product category
+# Description: Compares average prices between Food and Merchandising products
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX fair: <http://example.org/fair#>
+
+SELECT ?category (AVG(?price) AS ?averagePrice)
+WHERE {
+  ?product rdf:type ?type ;
+           fair:price ?price .
+
+  VALUES ?categoryType {
+    fair:Food
+    fair:Merchandising
+  }
+
+  FILTER(?type = ?categoryType)
+
+  BIND(STRAFTER(STR(?categoryType), "fair#") AS ?category)
+}
+GROUP BY ?category
+
+
+# Query 6: Vendors working in expensive attractions
+# Description: Gets vendors working at attractions costing more than 4 euros
+
+PREFIX fair: <http://example.org/fair#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?vendor ?vendorName ?attraction ?price
+WHERE {
+  ?vendor rdf:type fair:Vendor ;
+          fair:worksAt ?attraction ;
+          fair:vendorName ?vendorName .
+
+  ?attraction fair:price ?price .
+  FILTER(?price > 4.0)
+}
+ORDER BY DESC(?price)
+
+
+# Query 7: Number of vendors by type of attraction
+# Description: Groups and counts vendors working at Kids or All-Ages attractions
+
+PREFIX fair: <http://example.org/fair#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?type (COUNT(DISTINCT ?vendor) AS ?vendorCount)
+WHERE {
+  ?vendor fair:worksAt ?attraction .
+  ?attraction rdf:type ?type .
+  FILTER(?type IN (fair:KidsAttraction, fair:AllAgesAttraction))
+}
+GROUP BY ?type
