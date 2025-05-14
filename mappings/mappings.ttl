@@ -10,7 +10,7 @@
     rr:class :Supplier
   ];
   rr:predicateObjectMap [
-    rr:predicate :supplierName ;
+    rr:predicate :name ;
     rr:objectMap [ rr:column "NAME" ]
   ];
   rr:predicateObjectMap [
@@ -35,7 +35,7 @@
     rr:class :Stall
   ];
   rr:predicateObjectMap [
-    rr:predicate :stallName ;
+    rr:predicate :name ;
     rr:objectMap [ rr:column "NAME" ]
   ].
 
@@ -53,7 +53,7 @@
     rr:class :Vendor
   ];
   rr:predicateObjectMap [
-    rr:predicate :vendorName ;
+    rr:predicate :name ;
     rr:objectMap [ rr:column "NAME" ]
   ];
   rr:predicateObjectMap [
@@ -84,7 +84,7 @@
     rr:class :Attraction
   ];
   rr:predicateObjectMap [
-    rr:predicate rdfs:label ;
+    rr:predicate :name ;
     rr:objectMap [ rr:column "NAME" ]
   ];
   rr:predicateObjectMap [
@@ -121,7 +121,7 @@
     rr:class :Product
   ];
   rr:predicateObjectMap [
-    rr:predicate :productName ;
+    rr:predicate :name ;
     rr:objectMap [ rr:column "NAME" ]
   ];
   rr:predicateObjectMap [

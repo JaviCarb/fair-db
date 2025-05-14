@@ -36,7 +36,11 @@ SELECT ?type (AVG(?age) AS ?averageAge)
 WHERE {
   {
     SELECT ?vendor ?age
-           (IF(BOUND(?stall), "Stall", "Attraction") AS ?type)
+           (COALESCE(
+              IF(BOUND(?stall), "Stall", ""),
+              IF(BOUND(?attraction), "Attraction", ""),
+              "Unknown"
+            ) AS ?type)
     WHERE {
       ?vendor rdf:type fair:Vendor ;
               fair:vendorAge ?age .
@@ -46,6 +50,7 @@ WHERE {
   }
 }
 GROUP BY ?type
+
 
 
 # Query 4: Vendors linked to products through stalls (paths)

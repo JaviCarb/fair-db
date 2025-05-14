@@ -82,18 +82,9 @@
 #  DATA PROPERTIES
 # ===============================
 
-:vendorID rdf:type owl:DatatypeProperty ;
-          rdfs:label "Vendor ID" ;
-          rdfs:domain :Vendor ;
-          rdfs:range xsd:integer .
 
 :idDocument rdf:type owl:DatatypeProperty ;
             rdfs:label "ID Document" ;
-            rdfs:domain :Vendor ;
-            rdfs:range xsd:string .
-
-:vendorName rdf:type owl:DatatypeProperty ;
-            rdfs:label "Vendor Name" ;
             rdfs:domain :Vendor ;
             rdfs:range xsd:string .
 
@@ -108,16 +99,6 @@
              rdfs:range xsd:string ;
              rdfs:comment "Phone number must be valid for communication." .
 
-:stallName rdf:type owl:DatatypeProperty ;
-           rdfs:label "Stall Name" ;
-           rdfs:domain :Stall ;
-           rdfs:range xsd:string .
-
-:supplierName rdf:type owl:DatatypeProperty ;
-              rdfs:label "Supplier Name" ;
-              rdfs:domain :Supplier ;
-              rdfs:range xsd:string .
-
 :supplierAddress rdf:type owl:DatatypeProperty ;
                  rdfs:label "Supplier Address" ;
                  rdfs:domain :Supplier ;
@@ -129,10 +110,6 @@
            rdfs:range xsd:date ;
            rdfs:comment "Orders must have a valid date within a reasonable range." .
 
-:productName rdf:type owl:DatatypeProperty ;
-             rdfs:label "Product Name" ;
-             rdfs:domain :Product ;
-             rdfs:range xsd:string .
 
 :stock rdf:type owl:DatatypeProperty ;
        rdfs:label "Stock" ;
@@ -159,6 +136,14 @@
                rdfs:label "Expiration Date" ;
                rdfs:domain :Food ;
                rdfs:range xsd:date .
+
+:name rdf:type owl:DatatypeProperty ;
+      rdfs:label "Name" ;
+      rdfs:comment "Name of a stall, supplier, product, or attraction." ;
+      rdfs:range xsd:string ;
+      rdfs:domain [ rdf:type owl:Class ;
+                    owl:unionOf ( :Stall :Supplier :Product :Attraction :Vendor) ] .
+
 
 # ==== PRICE MODEL ====
 
